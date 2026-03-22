@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>graduation invite </title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:   #fdf8f0;
+  --warm:    #fef3e2;
+  --gold:    #c8961a;
+  --gold-dk: #a07010;
+  --gold-pl: #fcefd0;
+  --crimson: #b5272e;
+  --coral:   #e05c3a;
+  --deep:    #1c0f02;
+  --text:    #2d1a08;
+  --muted:   #9a7d5a;
+  --border:  rgba(200,150,26,0.25);
+  --shadow:  rgba(28,15,2,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:9999;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 48px;background:rgba(253,248,240,0.92);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--border);
+  transition:box-shadow .3s;
+}
+nav.scrolled{box-shadow:0 4px 32px var(--shadow);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--gold-dk);letter-spacing:.06em;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--gold-dk);}
+.nav-rsvp{background:var(--crimson)!important;color:#fff!important;padding:9px 22px;border-radius:3px;}
+.nav-rsvp:hover{background:#8f1d23!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+.hamburger span{width:24px;height:2px;background:var(--gold-dk);display:block;}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(155deg,#fff8ee 0%,#fef0d8 40%,#fde8c4 100%);
+}
+.hero-burst{position:absolute;inset:0;pointer-events:none;}
+.hero-burst::before,.hero-burst::after{content:'';position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(200,150,26,.18) 0%,transparent 70%);}
+.hero-burst::before{width:900px;height:900px;top:-200px;right:-200px;}
+.hero-burst::after{width:600px;height:600px;bottom:-100px;left:-150px;background:radial-gradient(circle,rgba(224,92,58,.1) 0%,transparent 70%);}
+.star-field{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.star{position:absolute;width:8px;height:8px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);opacity:.5;animation:twinkle 3s ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.8);}50%{opacity:.8;transform:scale(1.2);}}
+.hero-inner{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:120px 24px 80px;}
+.hero-ribbon{display:inline-flex;align-items:center;gap:14px;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--crimson);background:rgba(181,39,46,.07);border:1.5px solid rgba(181,39,46,.25);padding:7px 22px;border-radius:2px;margin-bottom:32px;animation:fadeUp .9s ease both;}
+.ribbon-line{width:30px;height:1.5px;background:var(--crimson);border-radius:2px;}
+.hero-photo-ring{width:190px;height:190px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,var(--coral) 100%);padding:4px;margin-bottom:36px;box-shadow:0 16px 60px rgba(200,150,26,.35);animation:fadeUp .9s .15s ease both;position:relative;}
+.hero-photo-ring::before{content:'';position:absolute;inset:-10px;border-radius:50%;border:1px dashed rgba(200,150,26,.4);animation:spin 20s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.hero-photo-inner{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#f5e6c8,#ecdbb8);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--gold-dk);letter-spacing:.1em;text-transform:uppercase;font-weight:600;text-align:center;line-height:1.6;overflow:hidden;}
+.hero-photo-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,6rem);font-weight:700;line-height:1;color:var(--deep);animation:fadeUp .9s .3s ease both;}
+.hero-name span{display:block;background:linear-gradient(135deg,var(--gold-dk),var(--coral));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-class{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,3vw,1.6rem);font-style:italic;font-weight:300;color:var(--muted);letter-spacing:.05em;margin-top:8px;margin-bottom:10px;animation:fadeUp .9s .42s ease both;}
+.hero-degree{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);font-weight:600;margin-bottom:40px;animation:fadeUp .9s .52s ease both;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .9s .64s ease both;}
+.btn-primary{background:linear-gradient(135deg,var(--crimson),#8f1d23);color:#fff;font-family:'Outfit',sans-serif;font-weight:600;font-size:.88rem;letter-spacing:.06em;text-transform:uppercase;padding:15px 38px;border:none;border-radius:3px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .25s;box-shadow:0 6px 24px rgba(181,39,46,.4);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(181,39,46,.5);}
+.btn-ghost{background:transparent;color:var(--gold-dk);border:1.5px solid var(--gold);font-family:'Outfit',sans-serif;font-weight:600;font-size:.88rem;letter-spacing:.06em;text-transform:uppercase;padding:14px 36px;border-radius:3px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:all .25s;}
+.btn-ghost:hover{background:var(--gold-pl);transform:translateY(-3px);}
+.scroll-cue{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;z-index:10;animation:fadeUp .9s 1s ease both;}
+.scroll-cue-label{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+.scroll-arrow{width:20px;height:20px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);animation:arrowBounce 1.6s ease-in-out infinite;margin-top:-6px;}
+@keyframes arrowBounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(6px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── COUNTDOWN ── */
+#countdown{background:linear-gradient(135deg,var(--crimson) 0%,#8f1d23 100%);padding:64px 24px;text-align:center;position:relative;overflow:hidden;}
+#countdown::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E") repeat;}
+.cd-label{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:500;margin-bottom:10px;position:relative;}
+.cd-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-style:italic;color:#fff;margin-bottom:44px;position:relative;}
+.cd-grid{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;position:relative;}
+.cd-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);border-radius:8px;padding:22px 30px;min-width:110px;transition:transform .2s;}
+.cd-box:hover{transform:translateY(-4px);}
+.cd-num{font-family:'Cormorant Garamond',serif;font-size:3.4rem;font-weight:700;color:#fff;line-height:1;display:block;}
+.cd-unit{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:6px;display:block;font-weight:500;}
+
+/* ── SHARED ── */
+.section-inner{max-width:1080px;margin:0 auto;padding:88px 24px;}
+.section-head{text-align:center;margin-bottom:60px;}
+.section-eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;font-weight:600;color:var(--crimson);margin-bottom:12px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.2rem);font-weight:700;color:var(--deep);line-height:1.1;}
+.section-title em{color:var(--gold-dk);font-style:italic;}
+.title-ornament{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:18px;}
+.ornament-line{height:1.5px;width:50px;background:var(--gold);border-radius:2px;}
+.ornament-diamond{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+.reveal{opacity:0;transform:translateY(28px);transition:all .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── EVENT ── */
+#event{background:var(--cream);}
+.event-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.event-cards{display:flex;flex-direction:column;gap:16px;}
+.ev-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px 26px;display:flex;gap:18px;align-items:flex-start;transition:all .3s;box-shadow:0 2px 12px var(--shadow);}
+.ev-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px var(--shadow);border-color:var(--gold);}
+.ev-icon{width:48px;height:48px;flex-shrink:0;border-radius:8px;background:var(--gold-pl);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.ev-icon svg{width:22px;height:22px;stroke:var(--gold-dk);}
+.ev-tag{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--gold-dk);margin-bottom:5px;}
+.ev-val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--deep);line-height:1.3;}
+.ev-sub{font-size:.82rem;color:var(--muted);margin-top:3px;}
+.map-wrap{border-radius:12px;overflow:hidden;border:2px solid var(--border);box-shadow:0 12px 48px var(--shadow);aspect-ratio:1;}
+.map-wrap iframe{width:100%;height:100%;border:none;display:block;}
+.map-note{font-size:.76rem;color:var(--gold-dk);text-align:center;margin-top:10px;font-style:italic;}
+
+/* ── RSVP ── */
+#rsvp{background:linear-gradient(160deg,var(--gold-pl) 0%,#fff5e6 100%);border-top:1px solid var(--border);}
+.rsvp-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:center;}
+.rsvp-left .section-eyebrow{text-align:left;}
+.rsvp-left h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:1.15;color:var(--deep);margin-bottom:16px;}
+.rsvp-left h2 em{color:var(--gold-dk);font-style:italic;}
+.rsvp-left p{color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:28px;}
+.rsvp-quote{border-left:3px solid var(--gold);padding-left:20px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--deep);line-height:1.65;}
+.rsvp-form{background:#fff;border:1px solid var(--border);border-radius:14px;padding:36px;box-shadow:0 16px 64px var(--shadow);display:flex;flex-direction:column;gap:20px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.fg{display:flex;flex-direction:column;gap:8px;}
+.fg label{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--gold-dk);}
+.fg input,.fg select,.fg textarea{background:var(--cream);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.93rem;padding:13px 16px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(154,125,90,.4);}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,150,26,.12);}
+.fg select option{background:#fff;}
+.fg textarea{resize:vertical;min-height:90px;}
+.form-btn{background:linear-gradient(135deg,var(--crimson),#8f1d23);color:#fff;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.04em;padding:16px;cursor:pointer;transition:all .25s;box-shadow:0 4px 20px rgba(181,39,46,.35);}
+.form-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(181,39,46,.45);}
+.form-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.form-error{background:rgba(181,39,46,.08);border:1px solid rgba(181,39,46,.3);border-radius:6px;padding:12px 16px;color:var(--crimson);font-size:.85rem;display:none;}
+.form-error.show{display:block;}
+.rsvp-success{display:none;text-align:center;background:#fff;border:1px solid var(--border);border-radius:14px;padding:56px 36px;box-shadow:0 16px 64px var(--shadow);}
+.rsvp-success-star{width:60px;height:60px;background:linear-gradient(135deg,var(--gold),var(--coral));clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);margin:0 auto 20px;}
+.rsvp-success h3{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--deep);margin-bottom:10px;}
+.rsvp-success p{color:var(--muted);font-size:.9rem;line-height:1.65;}
+
+/* ── MESSAGES ── */
+#messages{background:var(--cream);border-top:1px solid var(--border);}
+.msg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px;}
+.msg-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:26px;box-shadow:0 2px 12px var(--shadow);opacity:0;transform:translateY(20px);transition:all .5s;}
+.msg-card.visible{opacity:1;transform:translateY(0);}
+.msg-card:hover{box-shadow:0 8px 32px var(--shadow);transform:translateY(-4px);}
+.msg-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--text);line-height:1.7;margin-bottom:16px;}
+.msg-from{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);font-weight:600;}
+.msg-date{font-size:.62rem;color:var(--muted);margin-top:4px;}
+.msg-empty{text-align:center;color:var(--muted);padding:32px;font-style:italic;grid-column:span 3;}
+.msg-loading{text-align:center;color:var(--muted);padding:32px;grid-column:span 3;}
+.msg-form-wrap{max-width:600px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:14px;padding:36px;box-shadow:0 8px 40px var(--shadow);}
+.msg-form-wrap p{color:var(--muted);font-size:.9rem;margin-bottom:24px;text-align:center;line-height:1.65;}
+.msg-form-inner{display:flex;flex-direction:column;gap:16px;}
+.msg-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.msg-success{display:none;text-align:center;padding:24px;color:var(--gold-dk);font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;}
+
+/* ── SHARE ── */
+#share{background:var(--deep);padding:72px 24px;text-align:center;position:relative;overflow:hidden;}
+#share::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(200,150,26,.12) 0%,transparent 70%);}
+.share-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;color:#fff;margin-bottom:8px;position:relative;}
+.share-title em{color:var(--gold);font-style:italic;}
+.share-sub{color:rgba(255,255,255,.4);font-size:.88rem;letter-spacing:.06em;margin-bottom:36px;position:relative;}
+.share-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;position:relative;}
+.sbtn{display:flex;align-items:center;gap:9px;padding:12px 26px;border-radius:5px;font-weight:600;font-size:.85rem;letter-spacing:.04em;text-decoration:none;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:all .25s;}
+.sbtn:hover{transform:translateY(-3px);}
+.sbtn-wa{background:#25D366;color:#000;}
+.sbtn-ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;}
+.sbtn-email{background:rgba(200,150,26,.15);color:var(--gold);border:1px solid rgba(200,150,26,.4);}
+.sbtn-copy{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);}
+.sbtn svg{width:16px;height:16px;fill:currentColor;flex-shrink:0;}
+
+/* ── FOOTER ── */
+footer{background:#110a02;padding:48px 24px;text-align:center;border-top:1px solid rgba(200,150,26,.12);}
+.footer-name{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold);letter-spacing:.04em;margin-bottom:6px;}
+.footer-sub{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.25);}
+.footer-divider{width:50px;height:1.5px;background:rgba(200,150,26,.3);margin:18px auto;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;right:28px;z-index:9998;background:var(--gold);color:var(--deep);font-weight:700;padding:13px 22px;border-radius:5px;font-size:.82rem;letter-spacing:.04em;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ── SPINNER ── */
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px;}
+@keyframes spin-inline{to{transform:rotate(360deg);}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:14px 20px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:54px;left:0;right:0;background:rgba(253,248,240,.98);padding:20px 24px;gap:20px;border-bottom:1px solid var(--border);}
+  .event-layout,.rsvp-layout{grid-template-columns:1fr;}
+  .form-row,.msg-row{grid-template-columns:1fr;}
+  .msg-grid{grid-template-columns:1fr;}
+  .cd-box{min-width:80px;padding:16px 20px;}
+  .cd-num{font-size:2.6rem;}
+}
+@media(max-width:560px){
+  .hero-name{font-size:clamp(2.4rem,12vw,3.2rem);}
+  .section-inner{padding:64px 20px;}
+  .cd-grid{gap:8px;}
+  .cd-box{min-width:72px;padding:14px 16px;}
+  .cd-num{font-size:2.2rem;}
+  .rsvp-form,.msg-form-wrap{padding:24px 20px;}
+  .msg-empty{grid-column:span 1;}
+  .msg-loading{grid-column:span 1;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Evans Kioko · 2026</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#event">Ceremony</a></li>
+    <li><a href="#rsvp">RSVP</a></li>
+    <li><a href="#messages">Messages</a></li>
+    <li><a href="#share">Share</a></li>
+    <li><a href="#rsvp" class="nav-rsvp">RSVP Now</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-burst"></div>
+  <div class="star-field" id="starField"></div>
+  <div class="hero-inner">
+    <div class="hero-ribbon">
+      <span class="ribbon-line"></span>
+      Graduation Celebration · Class of 2026
+      <span class="ribbon-line"></span>
+    </div>
+    <div class="hero-photo-ring">
+      <div class="hero-photo-inner">
+       <img src="about.png" alt="Evans Kioko"> 
+       
+      </div>
+    </div>
+    <div class="hero-name"><span>Evans Kioko</span></div>
+    <div class="hero-class">Celebrating a Dream Achieved</div>
+    <div class="hero-degree">Bachelor of Technology in Civil Engineering</div>
+    <div class="hero-degree">TECHNICAL UNIVERSITY OF KENYA </div>
+    <div class="hero-ctas">
+      <a href="#rsvp" class="btn-primary">Confirm Attendance</a>
+      <a href="#event" class="btn-ghost">View Details</a>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span class="scroll-cue-label">Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section id="countdown">
+  <p class="cd-label">The Celebration Begins In</p>
+  <h2 class="cd-title">Counting Down to Graduation Day</h2>
+  <div class="cd-grid">
+    <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-unit">Days</span></div>
+    <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-unit">Hours</span></div>
+    <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-unit">Minutes</span></div>
+    <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-unit">Seconds</span></div>
+  </div>
+</section>
+
+<!-- EVENT -->
+<section id="event">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <p class="section-eyebrow">You Are Cordially Invited</p>
+      <h2 class="section-title">The <em>Graduation Ceremony</em></h2>
+      <div class="title-ornament"><span class="ornament-line"></span><span class="ornament-diamond"></span><span class="ornament-line"></span></div>
+    </div>
+    <div class="event-layout">
+      <div class="event-cards">
+        <div class="ev-card reveal">
+          <div class="ev-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div><p class="ev-tag">Date</p><p class="ev-val">Friday, 3rd April 2026</p><p class="ev-sub">Mark your calendar and save the date</p></div>
+        </div>
+        <div class="ev-card reveal">
+          <div class="ev-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><p class="ev-tag">Time</p><p class="ev-val">11:00 AM — 3:00 PM</p><p class="ev-sub">Four hours of celebration and memories</p></div>
+        </div>
+        <div class="ev-card reveal">
+          <div class="ev-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><p class="ev-tag">Venue</p><p class="ev-val">Benuru Group of Schools</p><p class="ev-sub">620 Plaza, Old Mombasa Road, Mlolongo</p></div>
+        </div>
+        <div class="ev-card reveal">
+          <div class="ev-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+          <div><p class="ev-tag">Dress Code</p><p class="ev-val">Smart Casual or Formal</p><p class="ev-sub">Gold, navy, and white tones are welcome</p></div>
+        </div>
+        <div class="reveal" style="margin-top:6px;">
+          <a href="#rsvp" class="btn-primary" style="display:inline-flex;width:100%;justify-content:center;">Reserve Your Place</a>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="map-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8614068580237!2d36.9255!3d-1.3442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjAnMzguOCJTIDM2wrA1NSczMS44IkU!5e0!3m2!1sen!2ske!4v1703001234567!5m2!1sen!2ske"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="Benuru Group of Schools, Mlolongo"></iframe>
+        </div>
+        <p class="map-note">620 Plaza, Old Mombasa Road, Mlolongo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RSVP -->
+<section id="rsvp">
+  <div class="section-inner">
+    <div class="rsvp-layout">
+      <div class="rsvp-left reveal">
+        <p class="section-eyebrow">Join the Celebration</p>
+        <h2>We Would Love You <em>There</em></h2>
+        <p>Your presence makes this milestone complete. Please fill in your details to confirm attendance at Evans' graduation celebration on 3rd April 2026.</p>
+        <blockquote class="rsvp-quote">
+          "This achievement belongs not just to me, but to every person who believed, supported, and cheered me on. See you there."<br><br>— Evans Kioko
+        </blockquote>
+      </div>
+      <div class="reveal" id="rsvp-wrap">
+        <form class="rsvp-form" id="rsvpForm" novalidate>
+          <div class="form-error" id="rsvpError"></div>
+          <div class="form-row">
+            <div class="fg"><label for="fname">Full Name</label><input type="text" id="fname" placeholder="Your full name" required /></div>
+            <div class="fg"><label for="femail">Email Address</label><input type="email" id="femail" placeholder="your@email.com" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="fg">
+              <label for="fguests">Number of Guests</label>
+              <select id="fguests">
+                <option value="1">Just me</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5+">5 or more</option>
+              </select>
+            </div>
+            <div class="fg"><label for="fphone">Phone </label><input type="tel" id="fphone" placeholder="+254 700 000 000" /></div>
+          </div>
+          <div class="fg">
+            <label for="fattending">Attending</label>
+            <select id="fattending">
+              <option value="both">Full Ceremony (11AM - 3PM)</option>
+              <option value="morning">Morning Only (11AM)</option>
+              <option value="afternoon">Afternoon Only</option>
+            </select>
+          </div>
+          <div class="fg"><label for="fmsg">Message to Evans </label><textarea id="fmsg" placeholder="Share a congratulations message or warm wish..."></textarea></div>
+          <button type="submit" class="form-btn" id="rsvpBtn">Confirm My Attendance</button>
+        </form>
+        <div class="rsvp-success" id="rsvpSuccess">
+          <div class="rsvp-success-star"></div>
+          <h3>You are Confirmed!</h3>
+          <p>Thank you for RSVPing. Evans is so excited to celebrate with you on 3rd April 2026 at Benuru Group of Schools, Mlolongo.<br><br>A confirmation email has been sent to you. See you there!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MESSAGES -->
+<section id="messages">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <p class="section-eyebrow">Words of Love</p>
+      <h2 class="section-title">Guest <em>Congratulations</em></h2>
+      <div class="title-ornament"><span class="ornament-line"></span><span class="ornament-diamond"></span><span class="ornament-line"></span></div>
+    </div>
+    <div class="msg-grid" id="msgGrid">
+      <p class="msg-loading">Loading messages...</p>
+    </div>
+    <div class="msg-form-wrap reveal">
+      <p>Leave Evans a personal message — it will be cherished for years to come.</p>
+      <div class="msg-form-inner">
+        <div class="form-error" id="msgError"></div>
+        <div class="msg-row">
+          <div class="fg"><label>Your Name</label><input type="text" id="mname" placeholder="Your name" /></div>
+          <div class="fg"><label>Relationship</label><input type="text" id="mrel" placeholder="e.g. Friend, Cousin" /></div>
+        </div>
+        <div class="fg"><label>Your Message</label><textarea id="mmsg" placeholder="Write your congratulations or a warm wish for Evans..." style="min-height:80px;"></textarea></div>
+        <div class="msg-success" id="msgSuccess">Your message has been sent. Thank you!</div>
+        <button type="button" class="form-btn" id="msgBtn" onclick="submitMsg()">Send My Message</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHARE -->
+<section id="share">
+  <h2 class="share-title">Spread the <em>Joy</em></h2>
+  <p class="share-sub">Share this invitation with family and friends</p>
+  <div class="share-btns">
+    <a class="sbtn sbtn-wa" id="waBtn" href="#" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+    <a class="sbtn sbtn-ig" href="https://www.instagram.com/" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Instagram
+    </a>
+    <button class="sbtn sbtn-email" onclick="shareEmail()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Email
+    </button>
+    <button class="sbtn sbtn-copy" onclick="copyLink()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+      Copy Link
+    </button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Evans Kioko</div>
+  <div class="footer-divider"></div>
+  <div class="footer-sub">B.Tech Civil Engineering &nbsp;·&nbsp; Class of 2026 &nbsp;·&nbsp; Benuru Group of Schools, Mlolongo</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── API BASE (auto-detects: same origin in prod, localhost in dev) ──
+const API = '';  // empty = same origin; or set to 'http://localhost:3000'
+
+// ── CONFETTI ──
+(function(){
+  const canvas=document.getElementById('confetti-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  const COLORS=['#c8961a','#f0c040','#e05c3a','#b5272e','#ffffff','#fcefd0','#f9d342','#ff6b6b'];
+  let particles=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  window.addEventListener('resize',resize);resize();
+  function P(burst){
+    this.x=burst?W/2:Math.random()*W;
+    this.y=burst?H*.35:-20;
+    const spd=burst?Math.random()*14+4:Math.random()*2.5+1;
+    const ang=burst?Math.random()*Math.PI*2:Math.PI/2+(Math.random()-.5)*.6;
+    this.vx=Math.cos(ang)*spd*(burst?1:.4);
+    this.vy=Math.sin(ang)*spd;
+    this.rot=Math.random()*360;this.drot=(Math.random()-.5)*8;
+    this.w=Math.random()*10+4;this.h=Math.random()*5+3;
+    this.color=COLORS[Math.floor(Math.random()*COLORS.length)];
+    this.round=Math.random()>.5;
+    this.life=1;this.grav=burst?.12:.06;
+  }
+  for(let i=0;i<100;i++){const p=new P(false);p.y=Math.random()*H;particles.push(p);}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach((p,i)=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy+=p.grav;p.rot+=p.drot;p.life-=.004;
+      if(p.life<=0||p.y>H+20){particles[i]=new P(false);particles[i].y=-20;return;}
+      ctx.save();ctx.globalAlpha=Math.min(p.life*2,1)*.8;
+      ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.color;
+      if(p.round){ctx.beginPath();ctx.arc(0,0,p.w/2,0,Math.PI*2);ctx.fill();}
+      else{ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);}
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  window.burstConfetti=function(){for(let i=0;i<80;i++)particles.push(new P(true));};
+})();
+
+// ── STARS ──
+(function(){
+  const sf=document.getElementById('starField');
+  [[8,12],[15,70],[88,18],[92,65],[50,8],[5,90],[78,85],[25,40],[65,30],[42,78]].forEach(([l,t],i)=>{
+    const s=document.createElement('div');s.className='star';
+    const sz=[14,10,18,12,10,16,12,14,10,16][i];
+    s.style.cssText=`left:${l}%;top:${t}%;width:${sz}px;height:${sz}px;animation-delay:${(i*.37).toFixed(2)}s;animation-duration:${2+i%3}s`;
+    sf.appendChild(s);
+  });
+})();
+
+// ── COUNTDOWN ──
+(function(){
+  const TARGET=new Date('2026-04-03T11:00:00');
+  function pad(n){return String(n).padStart(2,'0');}
+  function tick(){
+    const diff=TARGET-new Date();
+    if(diff<=0){['cd-d','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00');return;}
+    document.getElementById('cd-d').textContent=pad(Math.floor(diff/86400000));
+    document.getElementById('cd-h').textContent=pad(Math.floor(diff%86400000/3600000));
+    document.getElementById('cd-m').textContent=pad(Math.floor(diff%3600000/60000));
+    document.getElementById('cd-s').textContent=pad(Math.floor(diff%60000/1000));
+  }
+  tick();setInterval(tick,1000);
+})();
+
+// ── SCROLL REVEAL ──
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:.1});
+document.querySelectorAll('.reveal,.msg-card').forEach(el=>io.observe(el));
+
+// ── NAV ──
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>60));
+document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+
+// ── TOAST ──
+function showToast(msg,dur=3000){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ── MESSAGES: LOAD FROM BACKEND ──
+async function loadMessages(){
+  try {
+    const res=await fetch(`${API}/api/messages`);
+    const data=await res.json();
+    const grid=document.getElementById('msgGrid');
+    if(!data.ok||!data.messages.length){
+      grid.innerHTML='<p class="msg-empty">Be the first to leave Evans a message below.</p>';
+      return;
+    }
+    grid.innerHTML='';
+    data.messages.forEach(m=>renderMsgCard(m));
+  } catch(e){
+    document.getElementById('msgGrid').innerHTML='<p class="msg-empty">Could not load messages right now.</p>';
+  }
+}
+
+function renderMsgCard(m){
+  const grid=document.getElementById('msgGrid');
+  const card=document.createElement('div');
+  card.className='msg-card';
+  const date=m.created_at?new Date(m.created_at).toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'}):'';
+  card.innerHTML=`
+    <p class="msg-text">"${m.message}"</p>
+    <p class="msg-from">${m.name}${m.relationship?' — '+m.relationship:''}</p>
+    ${date?`<p class="msg-date">${date}</p>`:''}
+  `;
+  grid.appendChild(card);
+  setTimeout(()=>{card.classList.add('visible');io.observe(card);},60);
+}
+
+// ── RSVP FORM SUBMIT ──
+document.getElementById('rsvpForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=document.getElementById('rsvpBtn');
+  const errEl=document.getElementById('rsvpError');
+  errEl.classList.remove('show');
+
+  const name=document.getElementById('fname').value.trim();
+  const email=document.getElementById('femail').value.trim();
+  if(!name){errEl.textContent='Please enter your full name.';errEl.classList.add('show');return;}
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){errEl.textContent='Please enter a valid email address.';errEl.classList.add('show');return;}
+
+  btn.disabled=true;btn.textContent='Sending...';
+
+  try {
+    const res=await fetch(`${API}/api/rsvp`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name,email,
+        phone:document.getElementById('fphone').value.trim(),
+        guests:document.getElementById('fguests').value,
+        attending:document.getElementById('fattending').value,
+        message:document.getElementById('fmsg').value.trim(),
+      })
+    });
+    const data=await res.json();
+    if(!data.ok){
+      errEl.textContent=data.error||'Something went wrong. Please try again.';
+      errEl.classList.add('show');
+      btn.disabled=false;btn.textContent='Confirm My Attendance';
+      return;
+    }
+    // Success
+    document.getElementById('rsvpForm').style.display='none';
+    document.getElementById('rsvpSuccess').style.display='block';
+    window.burstConfetti&&window.burstConfetti();
+    // Reload messages in case the RSVP message was added
+    setTimeout(loadMessages,800);
+  } catch(err){
+    errEl.textContent='Network error. Please check your connection and try again.';
+    errEl.classList.add('show');
+    btn.disabled=false;btn.textContent='Confirm My Attendance';
+  }
+});
+
+// ── MESSAGE FORM SUBMIT ──
+async function submitMsg(){
+  const btn=document.getElementById('msgBtn');
+  const errEl=document.getElementById('msgError');
+  const successEl=document.getElementById('msgSuccess');
+  errEl.classList.remove('show');successEl.style.display='none';
+
+  const msg=document.getElementById('mmsg').value.trim();
+  if(!msg||msg.length<3){errEl.textContent='Please write a message.';errEl.classList.add('show');return;}
+
+  btn.disabled=true;btn.textContent='Sending...';
+  try {
+    const res=await fetch(`${API}/api/messages`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name:document.getElementById('mname').value.trim(),
+        relationship:document.getElementById('mrel').value.trim(),
+        message:msg,
+      })
+    });
+    const data=await res.json();
+    if(!data.ok){
+      errEl.textContent=data.error||'Could not send message. Try again.';
+      errEl.classList.add('show');
+      btn.disabled=false;btn.textContent='Send My Message';
+      return;
+    }
+    // Remove empty state if present
+    const empty=document.querySelector('.msg-empty,.msg-loading');
+    if(empty)empty.remove();
+    renderMsgCard(data.message);
+    document.getElementById('mname').value='';
+    document.getElementById('mrel').value='';
+    document.getElementById('mmsg').value='';
+    successEl.style.display='block';
+    btn.disabled=false;btn.textContent='Send My Message';
+  } catch(err){
+    errEl.textContent='Network error. Please try again.';
+    errEl.classList.add('show');
+    btn.disabled=false;btn.textContent='Send My Message';
+  }
+}
+
+// ── SHARE BUTTONS ──
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(()=>showToast('Link copied to clipboard'));
+}
+function shareEmail(){
+  const sub=encodeURIComponent('You Are Invited — Evans Kioko Graduation Celebration 2026');
+  const body=encodeURIComponent('Hello,\n\nYou are warmly invited to celebrate Evans Kioko\'s graduation — Bachelor of Technology in Civil Engineering, Class of 2026.\n\nDate: Friday, 3rd April 2026\nTime: 11:00 AM — 3:00 PM\nVenue: Benuru Group of Schools, 620 Plaza, Old Mombasa Road, Mlolongo\n\nView the full digital invitation:\n'+window.location.href);
+  window.open(`mailto:?subject=${sub}&body=${body}`);
+}
+// Set WhatsApp link dynamically with actual current URL
+document.getElementById('waBtn').href='https://wa.me/?text='+encodeURIComponent('You are invited to  Evans Kioko\'s Graduation Celebration — Class of 2026!\n\nFriday, 3rd April 2026 | 11AM – 3PM\nBenuru Group of Schools, Mlolongo\n\nView the full invite: '+window.location.href);
+
+// ── INIT ──
+loadMessages();
+</script>
+</body>
+</html>
