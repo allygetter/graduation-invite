@@ -66,9 +66,8 @@ if (msgCount === 0) {
   const insertMsg = db.prepare(`
     INSERT INTO messages (name, relationship, message) VALUES (?, ?, ?)
   `);
-  insertMsg.run('Mama Kioko',     'Mother',   'Evans, you have shown us all what it means to dream big and work hard. Engineer is not just a title — it is who you are. So proud of you.');
-  insertMsg.run('Brian M.',       'Classmate','From early morning classes to late night site visits, watching you grow into the engineer you are today has been the greatest privilege.');
-  insertMsg.run('Dr. Njenga',     'Lecturer', 'The world needs engineers who care deeply about people and community. Evans, you are exactly that. Congratulations, Engineer.');
+  insertMsg.run('kobbie ',     'Friend',   'Evans, you have shown us all what it means to dream big and work hard. Engineer is not just a title it is who you are. So proud of you.');
+
 }
 
 console.log('Database ready:', DB_PATH);
